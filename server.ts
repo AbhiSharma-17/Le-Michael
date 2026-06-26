@@ -3363,7 +3363,18 @@ app.post("/api/chat", async (req, res) => {
     });
     
     if (response.text) {
-      res.json({ text: response.text });
+      // Remove JSON code blocks if the AI formats it as markdown
+      let cleanText = response.text.replace(/```json[\s\S]*?```/g, '');
+      // Remove naked JSON objects to hide internal metadata from the user chat UI
+      cleanText = cleanText.replace(/\{[\s\S]*\}/g, '');
+      cleanText = cleanText.trim();
+      
+      // Fallback if the AI returned ONLY json with no conversational text
+      if (!cleanText) {
+        cleanText = "I understand. I'm processing your emergency and connecting you with the right support.";
+      }
+      
+      res.json({ text: cleanText });
     } else {
       res.status(500).json({ error: "Empty response from Gemini API" });
     }
