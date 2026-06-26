@@ -186,7 +186,7 @@ export default function App() {
           </nav>
 
           <div className="p-4">
-            <button className="w-full bg-red-50 dark:bg-red-600/10 hover:bg-red-600 dark:hover:bg-red-600 border border-red-200 dark:border-red-600/30 text-red-600 dark:text-red-500 hover:text-white dark:hover:text-white rounded-xl py-3 px-4 flex items-center gap-3 font-semibold transition-all group shadow-sm">
+            <button onClick={() => setActiveAgent("general")} className="w-full bg-red-50 dark:bg-red-600/10 hover:bg-red-600 dark:hover:bg-red-600 border border-red-200 dark:border-red-600/30 text-red-600 dark:text-red-500 hover:text-white dark:hover:text-white rounded-xl py-3 px-4 flex items-center gap-3 font-semibold transition-all group shadow-sm">
               <PhoneCall size={20} className="group-hover:animate-pulse" />
               <span>Quick SOS</span>
             </button>
@@ -237,7 +237,7 @@ export default function App() {
             {/* KPI CARDS */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <KpiCard icon={<AlertTriangle className="text-red-600 dark:text-red-500" />} title="Active Emergencies" value="3" subtitle="View all →" color="bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20" />
-              <KpiCard icon={<ShieldCheck className="text-blue-600 dark:text-blue-500" />} title="Agents Ready" value="16/16" subtitle="All systems operational" color="bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20" />
+              <KpiCard icon={<ShieldCheck className="text-blue-600 dark:text-blue-500" />} title="Agents Ready" value="15/15" subtitle="All systems operational" color="bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20" />
               <KpiCard icon={<MapPinned className="text-emerald-600 dark:text-emerald-500" />} title="Your Location" value={locationName || "Locating..."} subtitle="Accuracy: High" color="bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20" />
               <KpiCard icon={<History className="text-purple-600 dark:text-purple-500" />} title="Avg. Response Time" value="4.2 min" subtitle="Across all services" color="bg-purple-50 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20" />
             </div>
@@ -249,7 +249,7 @@ export default function App() {
               <div className="lg:col-span-4 bg-white dark:bg-[#0d1424] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col shadow-sm transition-colors duration-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-bold text-slate-900 dark:text-white">Emergency AI Agents</h3>
-                  <span className="text-xs text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-100 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">16/16 Active</span>
+                  <span className="text-xs text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-100 dark:bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-500/20">15/15 Active</span>
                 </div>
                 
                 <div className="grid grid-cols-3 gap-3">
@@ -323,7 +323,7 @@ export default function App() {
                 <div className="bg-white dark:bg-[#0d1424] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex-1 shadow-sm transition-colors duration-200">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-slate-900 dark:text-white">Critical Alerts</h3>
-                    <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">View All</button>
+                    <button onClick={() => setActiveModal("alerts")} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">View All</button>
                   </div>
                   
                   <div className="space-y-3">
@@ -344,7 +344,7 @@ export default function App() {
               <div className="lg:col-span-4 bg-white dark:bg-[#0d1424] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm transition-colors duration-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-bold text-slate-900 dark:text-white">Recent Incidents</h3>
-                  <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">View All</button>
+                  <button onClick={() => setActiveModal("history")} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">View All</button>
                 </div>
                 <div className="space-y-2.5">
                   <IncidentItem icon={<CarFront size={18}/>} color="text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10" title="Road Accident" desc="SG Highway, Ahmedabad" tag="High" tagColor="text-red-700 dark:text-red-400 border-red-200 dark:border-red-500/30" time="10 min ago" />
@@ -373,14 +373,14 @@ export default function App() {
                 <div className="bg-white dark:bg-[#0d1424] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm h-full transition-colors duration-200">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-slate-900 dark:text-white">Emergency Contacts</h3>
-                    <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">Manage</button>
+                    <button onClick={() => setActiveModal("contacts")} className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">Manage</button>
                   </div>
                   <div className="space-y-3">
                     <ContactItem name="Papa" phone="+91 98765 43210" color="bg-emerald-600" initials="P" />
                     <ContactItem name="Mumma" phone="+91 98765 43211" color="bg-purple-600" initials="M" />
                     <ContactItem name="Brother" phone="+91 98765 43212" color="bg-blue-600" initials="B" />
                   </div>
-                  <button className="w-full mt-4 py-2 border border-slate-300 dark:border-slate-700 border-dashed rounded-lg text-sm text-slate-500 dark:text-slate-400 font-bold hover:text-slate-700 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-500 transition-colors bg-slate-50 dark:bg-slate-800/30">
+                  <button onClick={() => setActiveModal("contacts")} className="w-full mt-4 py-2 border border-slate-300 dark:border-slate-700 border-dashed rounded-lg text-sm text-slate-500 dark:text-slate-400 font-bold hover:text-slate-700 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-500 transition-colors bg-slate-50 dark:bg-slate-800/30">
                     + Add New Contact
                   </button>
                 </div>
