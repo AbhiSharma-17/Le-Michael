@@ -1,0 +1,11 @@
+{
+  "name": "Emergency AI Dispatch",
+  "description": "An emergency response AI application that helps classify and guide users through various crisis situations.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
