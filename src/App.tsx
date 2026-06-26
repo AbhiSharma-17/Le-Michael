@@ -15,6 +15,11 @@ import LocationNavigationAgent from "./agents/LocationNavigationAgent";
 import MentalHealthAgent from "./agents/MentalHealthAgent";
 import OfflineGuide from "./components/OfflineGuide";
 import AgentDirectory from "./components/AgentDirectory";
+import EmergencyContactsModal from "./components/modals/EmergencyContactsModal";
+import AlertsNotificationsModal from "./components/modals/AlertsNotificationsModal";
+import IncidentHistoryModal from "./components/modals/IncidentHistoryModal";
+import SafetyToolsModal from "./components/modals/SafetyToolsModal";
+import HelpSupportModal from "./components/modals/HelpSupportModal";
 import {
   LayoutDashboard, Mic, MapPin, ShieldAlert, Users, Bell, History, Wrench, BookOpen, Settings, HelpCircle,
   PhoneCall, ArrowRight, ShieldCheck, HeartPulse, Search, Home, UserRoundCheck, Radar, Shield, CarFront,
@@ -58,6 +63,15 @@ export default function App() {
     | "mental_health"
     | "directory"
   >("none");
+  
+  const [activeModal, setActiveModal] = useState<
+    | "contacts"
+    | "alerts"
+    | "history"
+    | "tools"
+    | "help"
+    | null
+  >(null);
   
   const [locationName, setLocationName] = useState<string | null>(null);
   const [locationCoords, setLocationCoords] = useState<[number, number] | null>(null);
@@ -159,15 +173,15 @@ export default function App() {
             <NavItem icon={<Mic size={18} />} label="Voice Assistant" onClick={() => setActiveAgent("voice")} />
             <NavItem icon={<MapPin size={18} />} label="Live Location" onClick={() => setActiveAgent("location")} />
             <NavItem icon={<Shield size={18} />} label="My Safety" onClick={() => setActiveAgent("womens")} />
-            <NavItem icon={<Users size={18} />} label="Emergency Contacts" />
-            <NavItem icon={<Bell size={18} />} label="Alerts & Notifications" badge="3" />
-            <NavItem icon={<History size={18} />} label="Incident History" />
-            <NavItem icon={<Wrench size={18} />} label="Safety Tools" />
+            <NavItem icon={<Users size={18} />} label="Emergency Contacts" onClick={() => setActiveModal("contacts")} />
+            <NavItem icon={<Bell size={18} />} label="Alerts & Notifications" badge="3" onClick={() => setActiveModal("alerts")} />
+            <NavItem icon={<History size={18} />} label="Incident History" onClick={() => setActiveModal("history")} />
+            <NavItem icon={<Wrench size={18} />} label="Safety Tools" onClick={() => setActiveModal("tools")} />
             <NavItem icon={<BookOpen size={18} />} label="Offline Survival Guide" onClick={() => setActiveAgent("offline")} />
             
             <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800">
               <NavItem icon={<Settings size={18} />} label="Settings" onClick={() => setShowSettings(true)} />
-              <NavItem icon={<HelpCircle size={18} />} label="Help & Support" />
+              <NavItem icon={<HelpCircle size={18} />} label="Help & Support" onClick={() => setActiveModal("help")} />
             </div>
           </nav>
 
@@ -401,57 +415,44 @@ export default function App() {
         </main>
       </div>
 
-      {/* SETTINGS MODAL */}
+      {/* MODALS */}
       {showSettings && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#0d1424] border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden transition-colors duration-200">
-            <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Settings size={20} className="text-indigo-500" /> Settings
+          <div className="bg-white dark:bg-[#0a0f1c] border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
+            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Settings size={20} /> Settings
               </h2>
-              <button onClick={() => setShowSettings(false)} className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+              <button onClick={() => setShowSettings(false)} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg text-slate-500 transition-colors">
                 <X size={20} />
               </button>
             </div>
-            <div className="p-6 space-y-6">
-              
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider opacity-80">Appearance</h3>
-                <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-                  <div className="flex items-center gap-3">
-                    {theme === 'dark' ? <Moon className="text-indigo-400" /> : <Sun className="text-amber-500" />}
-                    <div>
-                      <p className="font-bold text-slate-900 dark:text-white">Theme Mode</p>
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Toggle light or dark theme</p>
-                    </div>
+            <div className="p-4">
+              <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700/50">
+                <div className="flex items-center gap-3">
+                  {theme === 'dark' ? <Moon size={18} className="text-indigo-400" /> : <Sun size={18} className="text-amber-500" />}
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-white">App Theme</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">{theme} mode active</p>
                   </div>
-                  <button 
-                    onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                    className="relative inline-flex h-7 w-12 items-center rounded-full bg-indigo-500 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
-                  >
-                    <span
-                      className={`${theme === 'dark' ? 'translate-x-6 bg-slate-900' : 'translate-x-1 bg-white'} inline-block h-5 w-5 transform rounded-full transition-transform`}
-                    />
-                  </button>
                 </div>
+                <button
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                >
+                  Toggle
+                </button>
               </div>
-
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-wider opacity-80">Account</h3>
-                <div className="space-y-2">
-                  <button className="w-full text-left p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                    Manage Profile
-                  </button>
-                  <button className="w-full text-left p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-                    Sign Out
-                  </button>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
       )}
+
+      {activeModal === "contacts" && <EmergencyContactsModal onClose={() => setActiveModal(null)} />}
+      {activeModal === "alerts" && <AlertsNotificationsModal onClose={() => setActiveModal(null)} />}
+      {activeModal === "history" && <IncidentHistoryModal onClose={() => setActiveModal(null)} />}
+      {activeModal === "tools" && <SafetyToolsModal onClose={() => setActiveModal(null)} />}
+      {activeModal === "help" && <HelpSupportModal onClose={() => setActiveModal(null)} />}
 
     </div>
   );

@@ -3353,6 +3353,9 @@ app.post("/api/chat", async (req, res) => {
       systemInstruction = mentalHealthSystemInstruction;
     }
 
+    // Force the AI to be purely conversational
+    systemInstruction += "\n\nCRITICAL RULE: DO NOT output any JSON, metadata, internal state, or structured formatting (like 'Language:', 'Emotion:', etc.). Respond ONLY with natural conversational text suitable for a direct human interface. Be concise and empathetic.";
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: formattedContents,
